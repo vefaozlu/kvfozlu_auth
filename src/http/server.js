@@ -1,9 +1,8 @@
 const express = require("express");
 const session = require("express-session");
-const RedisStore = require("connect-redis").default
-const redis = require("redis");
+const RedisStore = require("connect-redis").default;
 const passport = require("passport");
-
+const client = require("../../redis/config");
 const path = require("path");
 
 require("dotenv").config();
@@ -17,18 +16,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "../../public")));
 
-let redisClient = redis.createClient({
-  host: process.env.REDIS_HOST || "localhost",
-  port: process.env.REDIS_PORT || 6379,
-});
-
-redisClient.connect().catch(console.error)
-
-let redisStore = new RedisStore({
-  client: redisClient,
-  prefix: "auth:",
-})
-
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
@@ -38,7 +25,7 @@ app.use(
       maxAge: 10 * 60 * 1000,
       sameSite: "strict",
     },
-    store: redisStore,
+    store: new RedisStore({ client: client }),
   })
 );
 
