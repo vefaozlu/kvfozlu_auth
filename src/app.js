@@ -4,8 +4,8 @@ const client = require("../redis/config");
 const main = async () => {
   //  await client.connect();
 
-  app.listen(1234, () => {
-    console.log("Listening on port 1234");
+  app.listen(8000, () => {
+    console.log("Listening on port 8000");
   });
 };
 
