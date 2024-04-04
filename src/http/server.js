@@ -33,4 +33,9 @@ app.use(passport.authenticate("session"));
 
 app.use("/", require("./routers/auth.router.js"));
 
+app.get("/test", (req, res) => {
+  console.log("Request recieved");
+  return res.status(503).send("AAATest");
+});
+
 module.exports = app;
